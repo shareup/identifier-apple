@@ -17,8 +17,8 @@ public struct Identifier:
         }.joined()
     }
     
-    public init(size: Int = 16) {
-        var bytes = [UInt8](repeating: 0, count: size)
+    public init(byteSize count: Int = 16) {
+        var bytes = [UInt8](repeating: 0, count: count)
         
         if SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes) != errSecSuccess {
             fatalError("Cannot generate random bytes so we are dead...")
