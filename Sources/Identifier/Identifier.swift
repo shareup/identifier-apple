@@ -12,7 +12,9 @@ public struct Identifier:
 
     public init(rawValue: [UInt8]) {
         self.rawValue = rawValue
-        self.stringValue = rawValue.map { String($0, radix: 16) }.joined()
+        self.stringValue = rawValue.map {
+            String($0, radix: 16).padding(toLength: 2, withPad: "0", startingAt: 0)
+        }.joined()
     }
     
     public init() {
