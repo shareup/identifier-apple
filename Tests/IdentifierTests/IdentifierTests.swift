@@ -34,8 +34,8 @@ final class IdentifierTests: XCTestCase {
         let identifier = Identifier()
         
         let encoded = try JSONEncoder().encode(identifier)
-        let rawEncoded = try XCTUnwrap(String(data: encoded, encoding: .utf8))
-        XCTAssertEqual("\"\(identifier.stringValue)\"", rawEncoded)
+        let stringEncoded = try XCTUnwrap(String(data: encoded, encoding: .utf8))
+        XCTAssertEqual("\"\(identifier.stringValue)\"", stringEncoded)
 
         let sameIdentifier = try JSONDecoder().decode(Identifier.self, from: encoded)
         XCTAssertEqual(identifier, sameIdentifier)

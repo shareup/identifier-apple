@@ -5,7 +5,6 @@ public struct Identifier:
     Hashable, RawRepresentable
 {
     public let rawValue: [UInt8]
-    public let dataValue: Data
     public let stringValue: String
     
     public var description: String { stringValue }
@@ -13,7 +12,6 @@ public struct Identifier:
 
     public init(rawValue: [UInt8]) {
         self.rawValue = rawValue
-        self.dataValue = Data(rawValue)
         self.stringValue = rawValue.map { String($0, radix: 16) }.joined()
     }
     
