@@ -13,7 +13,13 @@ public struct Identifier:
     public init(rawValue: [UInt8]) {
         self.rawValue = rawValue
         self.stringValue = rawValue.map {
-            String($0, radix: 16).padding(toLength: 2, withPad: "0", startingAt: 0)
+            let encoded = String($0, radix: 16)
+            
+            if (encoded.count == 2) {
+                return encoded
+            } else {
+                return "0\(encoded)"
+            }
         }.joined()
     }
     
