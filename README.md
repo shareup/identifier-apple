@@ -1,6 +1,6 @@
 # Identifier
 
-`Identifier` is a `String`-backed, globally unique identifier. It is commonly used as a model identifier, and it supports Swift's `Identifiable` protocol.
+`Identifier` is a `Bytes`-backed, globally unique identifier. It is commonly used as a model identifier and it can help one conform to Swift's `Identifiable` protocol.
 
 ## Usage
 
@@ -13,7 +13,7 @@ struct Todo: Hashable, Identifiable {
 
 extension Todo {
     init(title: String) {
-        id = Identifier() // New, unqique identifier
+        id = Identifier() // New, unique identifier
         self.title = title
         isCompleted = false
     }
@@ -24,7 +24,7 @@ extension Todo {
 
 ### Swift Package Manager
 
-To use SQLite with the Swift Package Manager, add a dependency to your Package.swift file:
+To use `Identifier` with the Swift Package Manager, add a dependency to your `Package.swift` file:
  
  ```swift
  let package = Package(
@@ -32,7 +32,7 @@ To use SQLite with the Swift Package Manager, add a dependency to your Package.s
         .package(
             name: "Identifier", 
             url: "https://github.com/shareup/identifier-apple.git", 
-            from: "1.0.0"
+            from: "3.0.0"
         )
     ]
  )
