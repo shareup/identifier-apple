@@ -1,58 +1,27 @@
 import Foundation
+import Bytes
 
-public struct Identifier:
-    Codable, CustomStringConvertible, ExpressibleByStringLiteral,
-    Hashable, RawRepresentable
-{
-    public let rawValue: [UInt8]
-    public let stringValue: String
-    
-    public var description: String { stringValue }
-    public var ns_string: NSString { stringValue as NSString }
+public struct Identifier: ContiguousBytes, CustomStringConvertible, Equatable, Hashable, RawRepresentable {
+    private let storage: Bytes
+
+    public var rawValue: [UInt8] { storage.rawValue }
+    public var data: Data { storage.data }
+    public var description: String { storage.description }
 
     public init(rawValue: [UInt8]) {
-        self.rawValue = rawValue
-        self.stringValue = rawValue.map {
-            let encoded = String($0, radix: 16)
-            
-            if (encoded.count == 2) {
-                return encoded
-            } else {
-                return "0\(encoded)"
-            }
-        }.joined()
+        self.storage = Bytes(rawValue: rawValue)
     }
     
     public init(byteSize count: Int = 16) {
-        var bytes = [UInt8](repeating: 0, count: count)
-        
-        if SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes) != errSecSuccess {
-            fatalError("Cannot generate random bytes so we are dead...")
-        }
-        
-        self.init(rawValue: bytes)
+        self.storage = Bytes.random(size: count)
     }
 
     public init(data: Data) {
-        self.init(rawValue: [UInt8](data))
+        self.storage = Bytes(data: data)
     }
     
-    public init(string: String) {
-        if string.count % 2 == 0 && string.allSatisfy({ $0.isHexDigit }) {
-            let bytes = stride(from: 0, to: string.count, by: 2).map { i -> UInt8 in
-                let startIndex = string.index(string.startIndex, offsetBy: i)
-                let endIndex = string.index(string.startIndex, offsetBy: i + 1)
-                return UInt8(string[startIndex ... endIndex], radix: 16)!
-            }
-            
-            self.init(rawValue: bytes)
-        } else {
-            self.init(rawValue: [UInt8](string.utf8))
-        }
-    }
-
-    public init(stringLiteral value: String) {
-        self.init(string: value)
+    public init(hexEncoded: String) throws {
+        self.storage = try Bytes(hexEncoded: hexEncoded)
     }
     
     public init(uuid: UUID) {
@@ -62,15 +31,12 @@ public struct Identifier:
         
         self.init(data: data)
     }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let value = try container.decode(String.self)
-        self.init(string: value)
+
+    public func hexEncodedString() -> String {
+        storage.hexEncodedString()
     }
-    
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(stringValue)
+
+    public func withUnsafeBytes<R>(_ body: (UnsafeRawBufferPointer) throws -> R) rethrows -> R {
+        try storage.withUnsafeBytes(body)
     }
 }

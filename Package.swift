@@ -8,11 +8,13 @@ let package = Package(
             name: "Identifier",
             targets: ["Identifier"]),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(name: "Bytes", url: "https://github.com/shareup/bytes-apple.git", from: "1.0.0")
+    ],
     targets: [
         .target(
             name: "Identifier",
-            dependencies: []),
+            dependencies: ["Bytes"]),
         .testTarget(
             name: "IdentifierTests",
             dependencies: ["Identifier"]),

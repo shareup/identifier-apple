@@ -5,9 +5,9 @@ final class IdentifierTests: XCTestCase {
     func testStringValueIsBase16() throws {
         // NOTE: "foo"
         let id = Identifier(rawValue: [102, 111, 111])
-        XCTAssertEqual("666f6f", id.stringValue)
+        XCTAssertEqual("666f6f", id.hexEncodedString())
         
-        let sameID = Identifier(string: "666f6f")
+        let sameID = try Identifier(hexEncoded: "666f6f")
         XCTAssertEqual([102, 111, 111], sameID.rawValue)
         
         XCTAssertEqual(id, sameID)
@@ -28,16 +28,5 @@ final class IdentifierTests: XCTestCase {
         let identifier = Identifier(uuid: uuid)
         
         XCTAssertEqual(uuidBytes, identifier.rawValue)
-    }
-
-    func testCanSerializeToAndFromJSON() throws {
-        let identifier = Identifier()
-        
-        let encoded = try JSONEncoder().encode(identifier)
-        let stringEncoded = try XCTUnwrap(String(data: encoded, encoding: .utf8))
-        XCTAssertEqual("\"\(identifier.stringValue)\"", stringEncoded)
-
-        let sameIdentifier = try JSONDecoder().decode(Identifier.self, from: encoded)
-        XCTAssertEqual(identifier, sameIdentifier)
     }
 }
