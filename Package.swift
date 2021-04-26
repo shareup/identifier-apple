@@ -18,7 +18,7 @@ let package = Package(
     targets: [
         .target(
             name: "Identifier",
-            dependencies: [.product(name: "BytesDynamic", package: "Bytes")]),
+            dependencies: ["Bytes"]),
         .testTarget(
             name: "IdentifierTests",
             dependencies: ["Identifier"]),
