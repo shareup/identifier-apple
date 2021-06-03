@@ -7,13 +7,9 @@ let package = Package(
         .library(
             name: "Identifier",
             targets: ["Identifier"]),
-        .library(
-            name: "IdentifierDynamic",
-            type: .dynamic,
-            targets: ["Identifier"]),
     ],
     dependencies: [
-        .package(name: "Bytes", url: "https://github.com/shareup/bytes-apple.git", from: "2.1.0")
+        .package(name: "Bytes", url: "https://github.com/shareup/bytes-apple.git", from: "3.0.0")
     ],
     targets: [
         .target(
