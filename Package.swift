@@ -9,12 +9,19 @@ let package = Package(
             targets: ["Identifier"]),
     ],
     dependencies: [
-        .package(name: "Bytes", url: "https://github.com/shareup/bytes-apple.git", from: "3.0.0")
+        .package(
+            name: "Base64URL",
+            url: "https://github.com/shareup/base64url-apple.git",
+            from: "0.1.0"),
+        .package(
+            name: "Bytes",
+            url: "https://github.com/shareup/bytes-apple.git",
+            from: "3.0.0"),
     ],
     targets: [
         .target(
             name: "Identifier",
-            dependencies: ["Bytes"]),
+            dependencies: ["Base64URL", "Bytes"]),
         .testTarget(
             name: "IdentifierTests",
             dependencies: ["Identifier"]),

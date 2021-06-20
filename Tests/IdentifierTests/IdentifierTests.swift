@@ -1,13 +1,13 @@
 import XCTest
-@testable import Identifier
+import Identifier
 
 final class IdentifierTests: XCTestCase {
-    func testStringValueIsBase16() throws {
+    func testStringValueIsBase64() throws {
         // NOTE: "foo"
         let id = Identifier(rawValue: [102, 111, 111])
-        XCTAssertEqual("666f6f", id.hexEncodedString())
+        XCTAssertEqual("Zm9v", id.base64URLEncodedString())
         
-        let sameID = try Identifier(hexEncoded: "666f6f")
+        let sameID = try Identifier(base64URLEncoded: "Zm9v")
         XCTAssertEqual([102, 111, 111], sameID.rawValue)
         
         XCTAssertEqual(id, sameID)

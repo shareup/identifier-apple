@@ -32,7 +32,7 @@ To use `Identifier` with the Swift Package Manager, add a dependency to your `Pa
         .package(
             name: "Identifier", 
             url: "https://github.com/shareup/identifier-apple.git", 
-            from: "4.0.0"
+            from: "5.0.0"
         )
     ]
  )

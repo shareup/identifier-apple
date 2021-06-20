@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "Base64URL",
+        "repositoryURL": "https://github.com/shareup/base64url-apple.git",
+        "state": {
+          "branch": null,
+          "revision": "6faa52f5415bb7f8148afcf382971c6b55703bd4",
+          "version": "0.1.0"
+        }
+      },
+      {
         "package": "Bytes",
         "repositoryURL": "https://github.com/shareup/bytes-apple.git",
         "state": {
