@@ -2,12 +2,11 @@ import Base64URL
 import Bytes
 import Foundation
 
-public struct Identifier: ContiguousBytes, CustomStringConvertible, Equatable, Hashable, RawRepresentable {
+public struct Identifier: ContiguousBytes, Equatable, Hashable, RawRepresentable {
     private let storage: Bytes
 
     public var rawValue: [UInt8] { storage.rawValue }
     public var data: Data { storage.data }
-    public var description: String { base64URLEncodedString() }
 
     public init(rawValue: [UInt8]) {
         self.storage = Bytes(rawValue: rawValue)
@@ -32,6 +31,11 @@ public struct Identifier: ContiguousBytes, CustomStringConvertible, Equatable, H
     public func withUnsafeBytes<R>(_ body: (UnsafeRawBufferPointer) throws -> R) rethrows -> R {
         try storage.withUnsafeBytes(body)
     }
+}
+
+extension Identifier: CustomStringConvertible, CustomDebugStringConvertible {
+    public var description: String { base64URLEncodedString() }
+    public var debugDescription: String { description }
 }
 
 extension Identifier {
