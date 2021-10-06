@@ -12,7 +12,7 @@ let package = Package(
         .package(
             name: "Base64URL",
             url: "https://github.com/shareup/base64url-apple.git",
-            from: "0.1.0"),
+            from: "0.1.1"),
         .package(
             name: "Bytes",
             url: "https://github.com/shareup/bytes-apple.git",
