@@ -1,25 +1,23 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "Base64URL",
-        "repositoryURL": "https://github.com/shareup/base64url-apple.git",
-        "state": {
-          "branch": null,
-          "revision": "e0a6831ec012e56bf58be6e33ec92b18efbe52d6",
-          "version": "0.1.1"
-        }
-      },
-      {
-        "package": "Bytes",
-        "repositoryURL": "https://github.com/shareup/bytes-apple.git",
-        "state": {
-          "branch": null,
-          "revision": "8485d7547d8613d2848206d33568e9d77a22cd33",
-          "version": "3.0.0"
-        }
+  "pins" : [
+    {
+      "identity" : "base64url-apple",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/shareup/base64url-apple.git",
+      "state" : {
+        "revision" : "b5e1d0f55b3564a5f9abbe2e6ae60c44b89891bd",
+        "version" : "1.0.0"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "bytes-apple",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/shareup/bytes-apple.git",
+      "state" : {
+        "revision" : "4a89e1f5fe634f817c2eeb364a106720c7aa5174",
+        "version" : "3.1.0"
+      }
+    }
+  ],
+  "version" : 2
 }
