@@ -2,7 +2,7 @@ import Base64URL
 import Bytes
 import Foundation
 
-public struct Identifier: ContiguousBytes, Equatable, Hashable, RawRepresentable {
+public struct Identifier: ContiguousBytes, Equatable, Hashable, RawRepresentable, Sendable {
     private let storage: Bytes
 
     public var rawValue: [UInt8] { storage.rawValue }
