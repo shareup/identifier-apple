@@ -30,9 +30,8 @@ To use `Identifier` with the Swift Package Manager, add a dependency to your `Pa
  let package = Package(
     dependencies: [
         .package(
-            name: "Identifier", 
             url: "https://github.com/shareup/identifier-apple.git", 
-            from: "5.0.0"
+            from: "5.2.0"
         )
     ]
  )
