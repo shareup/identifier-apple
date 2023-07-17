@@ -1,5 +1,5 @@
 import Base64URL
-import Identifier
+@testable import Identifier
 import XCTest
 
 final class IdentifierTests: XCTestCase {
@@ -64,5 +64,53 @@ final class IdentifierTests: XCTestCase {
 
         let decoded = try JSONDecoder().decode(Model.self, from: jsonData)
         XCTAssertEqual(model, decoded)
+    }
+
+    func testComparable() throws {
+        let ids = (0 ..< 1000).map { _ in Identifier() }
+        let sorted = ids.sorted()
+        let memcmpSorted = ids.sorted(using: MemcmpComparator())
+
+        XCTAssertEqual(memcmpSorted, sorted)
+    }
+
+    func testComparableWithDifferentLengths() throws {
+        let ids = (1 ... 100).map(Identifier.init).shuffled()
+        let sorted = ids.sorted()
+        let memcmpSorted = ids.sorted(using: MemcmpComparator())
+
+        XCTAssertEqual(memcmpSorted, sorted)
+    }
+}
+
+// NOTE: SQLite uses memcmp() for TEXT comparison
+// https://sqlite.org/datatype3.html#collation
+private struct MemcmpComparator: SortComparator {
+    typealias Compared = Identifier
+
+    var order: SortOrder
+
+    init(order: SortOrder = .forward) { self.order = order }
+
+    func compare(_ lhs: Identifier, _ rhs: Identifier) -> ComparisonResult {
+        let lCount = lhs.storage.utf8.count
+        let rCount = rhs.storage.utf8.count
+        let count = min(lCount, rCount)
+
+        let res = memcmp(lhs.storage, rhs.storage, count)
+
+        if res < 0 {
+            return order == .forward ? .orderedAscending : .orderedDescending
+        } else if res > 0 {
+            return order == .forward ? .orderedDescending : .orderedAscending
+        } else {
+            if lCount < rCount {
+                return order == .forward ? .orderedAscending : .orderedDescending
+            } else if lCount > rCount {
+                return order == .forward ? .orderedDescending : .orderedAscending
+            } else {
+                return .orderedSame
+            }
+        }
     }
 }

@@ -2,7 +2,7 @@ import Base64URL
 import Foundation
 
 public struct Identifier: Hashable, Sendable {
-    private let storage: String
+    internal let storage: String
 
     public init(byteSize count: Int = 16) {
         var bytes = [UInt8](repeating: 0, count: count)
@@ -56,6 +56,12 @@ extension Identifier: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(storage)
+    }
+}
+
+extension Identifier: Comparable {
+    public static func < (lhs: Identifier, rhs: Identifier) -> Bool {
+        lhs.storage < rhs.storage
     }
 }
 
