@@ -1,57 +1,85 @@
 import Base64URL
-import Bytes
 import Foundation
 
-public struct Identifier: ContiguousBytes, Equatable, Hashable, RawRepresentable, Sendable {
-    private let storage: Bytes
+public struct Identifier: Hashable, Sendable {
+    private let storage: String
 
-    public var rawValue: [UInt8] { storage.rawValue }
-    public var data: Data { storage.data }
-
-    public init(rawValue: [UInt8]) {
-        self.storage = Bytes(rawValue: rawValue)
-    }
-    
     public init(byteSize count: Int = 16) {
-        self.storage = Bytes.random(size: count)
+        var bytes = [UInt8](repeating: 0, count: count)
+
+        if SecRandomCopyBytes(
+            kSecRandomDefault,
+            bytes.count,
+            &bytes
+        ) != errSecSuccess {
+            fatalError("Cannot generate random bytes.")
+        }
+
+        self.init(data: Data(bytes))
     }
 
     public init(data: Data) {
-        self.storage = Bytes(data: data)
+        storage = data.base64URLEncodedString()
     }
 
     public init(uuid: UUID) {
         let data = withUnsafePointer(to: uuid.uuid) {
             Data(bytes: $0, count: MemoryLayout.size(ofValue: uuid.uuid))
         }
-        
+
         self.init(data: data)
     }
 
-    public func withUnsafeBytes<R>(_ body: (UnsafeRawBufferPointer) throws -> R) rethrows -> R {
-        try storage.withUnsafeBytes(body)
+    public var data: Data {
+        let data = Data([UInt8].init(storage.utf8))
+        return Data(base64URLEncoded: data)!
     }
 }
 
 extension Identifier: CustomStringConvertible, CustomDebugStringConvertible {
-    public var description: String { base64URLEncodedString() }
+    public var description: String { storage }
     public var debugDescription: String { description }
 }
 
-extension Identifier {
-    enum DecodingError: Error {
-        case cannotDecodeBase64URL(String)
-    }
+extension Identifier: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let string = try container.decode(String.self)
 
-    public init(base64URLEncoded string: String) throws {
-        if let data = Data(base64URLEncoded: string) {
-            self.init(data: data)
-        } else {
-            throw DecodingError.cannotDecodeBase64URL(string)
+        guard let _ = Data(base64URLEncoded: string) else {
+            throw Error.invalidBase64URLEncodedString(string)
         }
+
+        storage = string
     }
 
-    public func base64URLEncodedString() -> String {
-        Data(rawValue).base64URLEncodedString()
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(storage)
+    }
+}
+
+public extension Identifier {
+    init(base64URLEncoded string: String) throws {
+        guard let _ = Data(base64URLEncoded: string) else {
+            throw Error.invalidBase64URLEncodedString(string)
+        }
+
+        storage = string
+    }
+
+    @available(
+        *,
+        deprecated,
+        message: "Identifier now represents a Base64URL-encoded string directly"
+    )
+    func base64URLEncodedString() -> String {
+        storage
+    }
+}
+
+public extension Identifier {
+    enum Error: Swift.Error {
+        case invalidBase64URLEncodedString(String)
     }
 }

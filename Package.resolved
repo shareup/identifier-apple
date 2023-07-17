@@ -8,15 +8,6 @@
         "revision" : "b5e1d0f55b3564a5f9abbe2e6ae60c44b89891bd",
         "version" : "1.0.0"
       }
-    },
-    {
-      "identity" : "bytes-apple",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/shareup/bytes-apple.git",
-      "state" : {
-        "revision" : "4a89e1f5fe634f817c2eeb364a106720c7aa5174",
-        "version" : "3.1.0"
-      }
     }
   ],
   "version" : 2

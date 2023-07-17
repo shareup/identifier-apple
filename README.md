@@ -1,6 +1,6 @@
 # Identifier
 
-`Identifier` is a `Bytes`-backed, globally unique identifier. It is commonly used as a model identifier and it can help one conform to Swift's `Identifiable` protocol.
+`Identifier` represents a globally unique identifier. It is backed by a Base64URL-encoded string. `Identifier` is commonly used as a model identifier, and it can help one conform to Swift's `Identifiable` protocol.
 
 ## Usage
 
@@ -25,14 +25,14 @@ extension Todo {
 ### Swift Package Manager
 
 To use `Identifier` with the Swift Package Manager, add a dependency to your `Package.swift` file:
- 
- ```swift
- let package = Package(
-    dependencies: [
-        .package(
-            url: "https://github.com/shareup/identifier-apple.git", 
-            from: "5.2.0"
-        )
-    ]
- )
+
+```swift
+let package = Package(
+   dependencies: [
+       .package(
+           url: "https://github.com/shareup/identifier-apple.git", 
+           from: "6.0.0"
+       )
+   ]
+)
 ```
