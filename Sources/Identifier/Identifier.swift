@@ -18,10 +18,6 @@ public struct Identifier: Hashable, Sendable {
         self.init(data: Data(bytes))
     }
 
-    public init(seed: String) {
-        storage = Data(seed.utf8).base64URLEncodedString()
-    }
-
     public init(data: Data) {
         storage = data.base64URLEncodedString()
     }
@@ -51,10 +47,7 @@ extension Identifier: Codable {
         let string = try container.decode(String.self)
 
         guard let _ = Data(base64URLEncoded: string) else {
-            throw DecodingError.dataCorruptedError(
-                in: container,
-                debugDescription: "Invalid Base64URL-encoded string"
-            )
+            throw Error.invalidBase64URLEncodedString(string)
         }
 
         storage = string
@@ -67,13 +60,11 @@ extension Identifier: Codable {
 }
 
 public extension Identifier {
-    @available(
-        *,
-        deprecated,
-        message: "Identifier now represents a Base64URL-encoded string directly"
-    )
     init(base64URLEncoded string: String) throws {
-        precondition(Data(base64URLEncoded: string) != nil)
+        guard let _ = Data(base64URLEncoded: string) else {
+            throw Error.invalidBase64URLEncodedString(string)
+        }
+
         storage = string
     }
 
@@ -84,5 +75,11 @@ public extension Identifier {
     )
     func base64URLEncodedString() -> String {
         storage
+    }
+}
+
+public extension Identifier {
+    enum Error: Swift.Error {
+        case invalidBase64URLEncodedString(String)
     }
 }
