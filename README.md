@@ -31,7 +31,7 @@ let package = Package(
    dependencies: [
        .package(
            url: "https://github.com/shareup/identifier-apple.git", 
-           from: "6.0.0"
+           from: "6.1.0"
        )
    ]
 )
