@@ -3,7 +3,7 @@ import Foundation
 
 public struct Identifier: Hashable, Sendable {
     private let storage: String
-    
+
     public init(byteSize count: Int = 16) {
         var bytes = [UInt8](repeating: 0, count: count)
 
@@ -17,23 +17,23 @@ public struct Identifier: Hashable, Sendable {
 
         self.init(data: Data(bytes))
     }
-    
+
     public init(seed: String) {
-        self.storage = Data(seed.utf8).base64URLEncodedString()
+        storage = Data(seed.utf8).base64URLEncodedString()
     }
-    
+
     public init(data: Data) {
-        self.storage = data.base64URLEncodedString()
+        storage = data.base64URLEncodedString()
     }
 
     public init(uuid: UUID) {
         let data = withUnsafePointer(to: uuid.uuid) {
             Data(bytes: $0, count: MemoryLayout.size(ofValue: uuid.uuid))
         }
-        
+
         self.init(data: data)
     }
-    
+
     public var data: Data {
         let data = Data([UInt8].init(storage.utf8))
         return Data(base64URLEncoded: data)!
@@ -57,7 +57,7 @@ extension Identifier: Codable {
             )
         }
 
-        self.storage = string
+        storage = string
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -66,23 +66,23 @@ extension Identifier: Codable {
     }
 }
 
-extension Identifier {
+public extension Identifier {
     @available(
         *,
-         deprecated,
-         message: "Identifier now represents a Base64URL-encoded string directly"
+        deprecated,
+        message: "Identifier now represents a Base64URL-encoded string directly"
     )
-    public init(base64URLEncoded string: String) throws {
+    init(base64URLEncoded string: String) throws {
         precondition(Data(base64URLEncoded: string) != nil)
-        self.storage = string
+        storage = string
     }
 
     @available(
         *,
-         deprecated,
-         message: "Identifier now represents a Base64URL-encoded string directly"
+        deprecated,
+        message: "Identifier now represents a Base64URL-encoded string directly"
     )
-    public func base64URLEncodedString() -> String {
+    func base64URLEncodedString() -> String {
         storage
     }
 }
