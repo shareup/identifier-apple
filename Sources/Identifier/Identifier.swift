@@ -36,9 +36,10 @@ public struct Identifier: Hashable, Sendable {
     }
 }
 
-extension Identifier: CustomStringConvertible, CustomDebugStringConvertible {
+extension Identifier: CustomStringConvertible, CustomDebugStringConvertible, CustomReflectable {
     public var description: String { storage }
     public var debugDescription: String { description }
+    public var customMirror: Mirror { Mirror(self, children: []) }
 }
 
 extension Identifier: Codable {
